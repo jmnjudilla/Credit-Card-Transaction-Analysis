@@ -1,0 +1,58 @@
+--Aggregate Functions for Fraudless Transactions per Merchant
+SELECT 
+DISTINCT(`Merchant Name`),
+COUNT(*),
+SUM(amount),
+AVG(amount),
+MAX(amount),
+MIN(amount)
+FROM user0_credit_card_transactions
+WHERE `Is Fraud?` = 'No'
+GROUP BY 1;
+
+--Aggregate Functions for Transactions with Fraud
+SELECT 
+COUNT(*),
+SUM(amount),
+AVG(amount),
+MAX(amount),
+MIN(amount)
+FROM user0_credit_card_transactions
+WHERE `Is Fraud?` = 'Yes';
+
+--WHICH CUSTOMERS SPEND THE MOST
+SELECT
+	DISTINCT(`Merchant Name`),
+	SUM(amount)
+FROM user0_credit_card_transactions
+GROUP BY 1
+ORDER BY 2 DESC;
+
+--TOP SPENDING MERCHANT CITY
+SELECT
+	DISTINCT(`Merchant City`),
+    SUM(amount)
+FROM user0_credit_card_transactions
+GROUP BY 1
+ORDER BY 2 DESC;
+
+--DISTRIBUTION OF TRANSACTIONS BY TIME OF DAY
+SELECT 
+    CASE
+        WHEN Time BETWEEN 6 AND 11 THEN 'Morning'
+        WHEN Time BETWEEN 12 AND 17 THEN 'Afternoon'
+        WHEN Time BETWEEN 18 AND 23 THEN 'Evening'
+        ELSE 'Night'
+    END AS time_of_day,
+    COUNT(*) AS transaction_count
+FROM user0_credit_card_transactions
+GROUP BY time_of_day
+ORDER BY transaction_count DESC;
+
+--WHICH STATE HAS THE MOST SPENDING
+SELECT
+	DISTINCT(`Merchant State`),
+    SUM(amount)
+FROM user0_credit_card_transactions
+GROUP BY 1
+ORDER BY 2 DESC;
